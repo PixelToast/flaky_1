@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,15 +32,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async {
+  static Future<int> computeCounter(counter) async {
     await Future<void>.delayed(
       Duration(
-        milliseconds: Random().nextInt(20000),
+        milliseconds: (pow(Random().nextDouble(), 4) * 10000).round(),
       ),
     );
+    return counter + 1;
+  }
+
+  void _incrementCounter() async {
+    final newCounter = await compute(computeCounter, _counter);
     if (mounted) {
       setState(() {
-        _counter++;
+        _counter = newCounter;
       });
     }
   }
